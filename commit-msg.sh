@@ -9,6 +9,9 @@
 # exit 0
 #####
 
+# for test
+# read -p "commit msg: " COMMIT_MSG
+
 COMMIT_MSG=`cat $1`
 
 # validate format
@@ -19,23 +22,25 @@ if [ $FIELD_COUNT -lt 3 ]; then
 fi
 
 # validate type
+VALID_TYPES=("feat" "chore" "fix" "test" "docs" "refactor")
 TYPE=`echo $COMMIT_MSG | awk -F ':' '{print $1}' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
-case $TYPE in
-  "feat"|"chore"|"fix"|"test"|"docs"|"refactor")
-    ;;
-  *)
-    echo "\"$TYPE\" is invalid type."
-    exit 1
-esac
+if ! `echo ${VALID_TYPES[@]} | grep -q $TYPE`; then
+  echo "\"$TYPE\" is invalid type."
+  exit 1
+fi
 
 # validate sub-type
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+VALID_SUB_TYPES=()
+for d in $SCRIPT_DIR/*/; do
+  VALID_SUB_TYPES+=`basename $d`
+done
+VALID_SUB_TYPES+="Other"
+
 SUB_TYPE=`echo $COMMIT_MSG | awk -F ':' '{print $2}' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
-case $SUB_TYPE in
-  "Scala"|"Python"|"Go"|"MySQL"|"AWS"|"GCP"|"Git"|"Other")
-    ;;
-  *)
-    echo "\"$SUB_TYPE\" is invalid subtype."
-    exit 1
-esac
+if ! `echo ${VALID_SUB_TYPES[@]} | grep -q $SUB_TYPE`; then
+  echo "\"$SUB_TYPE\" is invalid subtype."
+  exit 1
+fi
 
 exit 0
