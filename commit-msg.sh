@@ -31,7 +31,7 @@ esac
 # validate sub-type
 SUB_TYPE=`echo $COMMIT_MSG | awk -F ':' '{print $2}' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
 case $SUB_TYPE in
-  "Scala"|"Python"|"Go"|"MySQL"|"AWS"|"GCP"|"Other")
+  "Scala"|"Python"|"Go"|"MySQL"|"AWS"|"GCP"|"Git"|"Other")
     ;;
   *)
     echo "\"$SUB_TYPE\" is invalid subtype."
