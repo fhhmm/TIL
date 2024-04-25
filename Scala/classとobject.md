@@ -2,7 +2,7 @@
 classは使用時にインスタンス化が必要。  
 objectはインスタンス化不要(できない)。
 
-```
+```scala
 class ExampleClass {
   def example() {
     ...
